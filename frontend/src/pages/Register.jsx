@@ -16,7 +16,7 @@ export default function Register() {
     try {
       const res = await api.post('/api/auth/register', { email, password });
       login(res.data.token);
-      navigate('/dashboard');
+      navigate('/forecast');
     } catch {
       setError('Email already in use or invalid input.');
     }

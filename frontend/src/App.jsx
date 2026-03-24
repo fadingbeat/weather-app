@@ -2,9 +2,12 @@ import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import Layout from './components/Layout';
+import ForecastPage from './pages/ForecastPage';
 import { useAuth } from './context/useAuth';
+import HistoryPage from './pages/HistoryPage';
 
-function Dashboard() {
+function LogoutButton() {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -13,12 +16,7 @@ function Dashboard() {
     navigate('/login');
   };
 
-  return (
-    <div>
-      <h2>Dashboard — protected</h2>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  );
+  return <button onClick={handleLogout}>Logout</button>;
 }
 
 export default function App() {
@@ -27,14 +25,18 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
-        path="/dashboard"
+        path="/forecast"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Layout>
+              <LogoutButton />
+              <ForecastPage />
+              <HistoryPage />
+            </Layout>
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/forecast" replace />} />
     </Routes>
   );
 }
