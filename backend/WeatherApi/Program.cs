@@ -30,7 +30,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("Frontend", policy =>
         policy.WithOrigins(
                 "http://localhost:5173",
-                "weather-webapp.up.railway.app"
+                "https://weather-webapp.up.railway.app"
               )
               .AllowAnyHeader()
               .AllowAnyMethod());
