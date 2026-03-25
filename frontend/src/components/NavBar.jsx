@@ -51,7 +51,7 @@ export default function NavBar() {
           transition: 'color 0.2s ease',
         })}
       >
-        Stats
+        Statistics
       </NavLink>
 
       <button
