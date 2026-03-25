@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import ForecastPage from './pages/ForecastPage';
 import { useAuth } from './context/useAuth';
 import HistoryPage from './pages/HistoryPage';
+import StatsPage from './pages/StatsPage';
 
 function LogoutButton() {
   const { logout } = useAuth();
@@ -31,7 +32,28 @@ export default function App() {
             <Layout>
               <LogoutButton />
               <ForecastPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/history"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <LogoutButton />
               <HistoryPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/stats"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <LogoutButton />
+              <StatsPage />
             </Layout>
           </ProtectedRoute>
         }
