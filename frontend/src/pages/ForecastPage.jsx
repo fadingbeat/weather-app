@@ -14,13 +14,31 @@ import {
 export default function ForecastPage() {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [selectedCity, setSelectedCity] = useState(null);
   const [forecastData, setForecastData] = useState([]);
   const [days, setDays] = useState(5);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const debounceRef = useRef(null);
 
+  const handleSelectCity = async (city) => {
+    setSelectedCity(city);
+    setQuery(`${city.name}`);
+    setSuggestions([]);
+    setError('');
+    setLoading(true);
+    try {
+      const res = await getForecast(city.name);
+      setForecastData(res.data.items);
+    } catch {
+      setError('Could not fetch forecast.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    if (selectedCity && query === selectedCity.name) return;
     if (query.length < 2) {
       setSuggestions([]);
       return;
@@ -34,22 +52,7 @@ export default function ForecastPage() {
         setSuggestions([]);
       }
     }, 300);
-  }, [query]);
-
-  const handleSelectCity = async (city) => {
-    setQuery(`${city.name}, ${city.country}`);
-    setSuggestions([]);
-    setError('');
-    setLoading(true);
-    try {
-      const res = await getForecast(city.name);
-      setForecastData(res.data.items);
-    } catch {
-      setError('Could not fetch forecast.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [query, selectedCity]);
 
   const filteredData = forecastData.filter((item) => {
     const itemDate = new Date(item.dateTime);

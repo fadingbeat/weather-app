@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getCurrentWeather } from '../api/weatherApi';
 
+const CACHE_KEY = 'weather_widget_cache';
+
 export default function WeatherWidget() {
-  const [weather, setWeather] = useState(null);
+  const [weather, setWeather] = useState(() => {
+    const cached = localStorage.getItem(CACHE_KEY);
+    return cached ? JSON.parse(cached) : null;
+  });
   const [error, setError] = useState(
     !navigator.geolocation ? 'Geolocation not supported' : '',
   );
@@ -16,12 +21,15 @@ export default function WeatherWidget() {
             position.coords.latitude,
             position.coords.longitude,
           );
+          localStorage.setItem(CACHE_KEY, JSON.stringify(res.data));
           setWeather(res.data);
         } catch {
-          setError('Could not fetch weather');
+          if (!weather) setError('Could not fetch weather');
         }
       },
-      () => setError('Location access denied'),
+      () => {
+        if (!weather) setError('Location access denied');
+      },
     );
   }, []);
 
