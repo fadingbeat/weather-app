@@ -28,7 +28,10 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(
+                "http://localhost:5173",
+                "weather-webapp.up.railway.app"
+              )
               .AllowAnyHeader()
               .AllowAnyMethod());
 });
@@ -59,6 +62,10 @@ builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+db.Database.Migrate();
 
 app.UseCors("Frontend");
 app.UseAuthentication();
