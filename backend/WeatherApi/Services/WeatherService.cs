@@ -1,9 +1,11 @@
 using System.Text.Json;
+using Microsoft.Extensions.Caching.Memory;
 
-public class WeatherService(HttpClient http, IConfiguration config) : IWeatherService
+public class WeatherService(HttpClient http, IConfiguration config, IMemoryCache cache) : IWeatherService
 {
     private readonly string _apiKey = config["OpenWeather:ApiKey"]!;
     private readonly string _baseUrl = config["OpenWeather:BaseUrl"]!;
+    private const string CitiesCacheKey = "croatian_cities";
 
     public async Task<CurrentWeatherDto?> GetCurrentWeatherAsync(double lat, double lon)
     {
@@ -57,21 +59,38 @@ public class WeatherService(HttpClient http, IConfiguration config) : IWeatherSe
 
     public async Task<List<CityDto>> SearchCitiesAsync(string query)
     {
-        var url = $"https://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid={_apiKey}";
-        var response = await http.GetAsync(url);
-        if (!response.IsSuccessStatusCode) return [];
-
-        var json = await response.Content.ReadAsStringAsync();
-        var doc = JsonDocument.Parse(json);
-
-        return doc.RootElement.EnumerateArray().Select(item => new CityDto
+        if (!cache.TryGetValue(CitiesCacheKey, out List<CityDto>? allCities))
         {
-            Name = item.GetProperty("name").GetString() ?? "",
-            Country = item.GetProperty("country").GetString() ?? "",
-            State = item.TryGetProperty("state", out var state) ? state.GetString() ?? "" : "",
-            Lat = item.GetProperty("lat").GetDouble(),
-            Lon = item.GetProperty("lon").GetDouble()
-        }).ToList();
+            var url = "http://bulk.openweathermap.org/sample/city.list.json.gz";
+            var response = await http.GetAsync(url);
+            if (!response.IsSuccessStatusCode) return [];
+
+            using var stream = await response.Content.ReadAsStreamAsync();
+            using var gzip = new System.IO.Compression.GZipStream(stream, System.IO.Compression.CompressionMode.Decompress);
+            using var reader = new System.IO.StreamReader(gzip);
+            var json = await reader.ReadToEndAsync();
+
+            var doc = JsonDocument.Parse(json);
+            allCities = doc.RootElement.EnumerateArray()
+                .Where(item => item.GetProperty("country").GetString() == "HR")
+                .Select(item => new CityDto
+                {
+                    Name = item.GetProperty("name").GetString() ?? "",
+                    Country = item.GetProperty("country").GetString() ?? "",
+                    Lat = item.GetProperty("coord").GetProperty("lat").GetDouble(),
+                    Lon = item.GetProperty("coord").GetProperty("lon").GetDouble()
+                }).ToList();
+
+            cache.Set(CitiesCacheKey, allCities, new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(30)
+            });
+        }
+
+        return allCities!
+            .Where(c => c.Name.StartsWith(query, StringComparison.OrdinalIgnoreCase))
+            .Take(10)
+            .ToList();
     }
 
 

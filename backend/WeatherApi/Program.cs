@@ -56,6 +56,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
