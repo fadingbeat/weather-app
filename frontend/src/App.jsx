@@ -1,24 +1,11 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import ForecastPage from './pages/ForecastPage';
-import { useAuth } from './context/useAuth';
 import HistoryPage from './pages/HistoryPage';
 import StatsPage from './pages/StatsPage';
-
-function LogoutButton() {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
-
-  return <button onClick={handleLogout}>Logout</button>;
-}
 
 export default function App() {
   return (
@@ -30,7 +17,6 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Layout>
-              <LogoutButton />
               <ForecastPage />
             </Layout>
           </ProtectedRoute>
@@ -41,7 +27,6 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Layout>
-              <LogoutButton />
               <HistoryPage />
             </Layout>
           </ProtectedRoute>
@@ -52,7 +37,6 @@ export default function App() {
         element={
           <ProtectedRoute>
             <Layout>
-              <LogoutButton />
               <StatsPage />
             </Layout>
           </ProtectedRoute>
