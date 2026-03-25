@@ -294,11 +294,17 @@ export default function ForecastPage() {
               borderColor: 'var(--border)',
             }}
           >
-            <table className="w-full text-sm">
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['Date & Time', 'Condition', 'Temp', 'Humidity', 'Wind'].map(
-                    (h) => (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm min-w-150">
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                    {[
+                      'Date & Time',
+                      'Condition',
+                      'Temp',
+                      'Humidity',
+                      'Wind',
+                    ].map((h) => (
                       <th
                         key={h}
                         className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
@@ -306,67 +312,69 @@ export default function ForecastPage() {
                       >
                         {h}
                       </th>
-                    ),
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((item, i) => (
-                  <tr
-                    key={i}
-                    style={{
-                      borderBottom:
-                        i < filteredData.length - 1
-                          ? '1px solid var(--border)'
-                          : 'none',
-                      backgroundColor:
-                        i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
-                    }}
-                  >
-                    <td
-                      className="px-6 py-3"
-                      style={{ color: 'var(--text-secondary)' }}
-                    >
-                      {new Date(item.dateTime).toLocaleString('en-GB', {
-                        weekday: 'short',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </td>
-                    <td className="px-6 py-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">
-                          {weatherIconMap[item.condition] ?? '🌡️'}
-                        </span>
-                        <span style={{ color: 'var(--text-primary)' }}>
-                          {item.condition}
-                        </span>
-                      </div>
-                    </td>
-                    <td
-                      className="px-6 py-3 font-semibold"
-                      style={{ color: 'var(--accent)' }}
-                    >
-                      {Math.round(item.temperature)}°C
-                    </td>
-                    <td
-                      className="px-6 py-3"
-                      style={{ color: 'var(--text-secondary)' }}
-                    >
-                      {item.humidity}%
-                    </td>
-                    <td
-                      className="px-6 py-3"
-                      style={{ color: 'var(--text-secondary)' }}
-                    >
-                      {item.windSpeed} m/s
-                    </td>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredData.map((item, i) => (
+                    <tr
+                      key={i}
+                      style={{
+                        borderBottom:
+                          i < filteredData.length - 1
+                            ? '1px solid var(--border)'
+                            : 'none',
+                        backgroundColor:
+                          i % 2 === 0
+                            ? 'transparent'
+                            : 'rgba(255,255,255,0.02)',
+                      }}
+                    >
+                      <td
+                        className="px-6 py-3"
+                        style={{ color: 'var(--text-secondary)' }}
+                      >
+                        {new Date(item.dateTime).toLocaleString('en-GB', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </td>
+                      <td className="px-6 py-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">
+                            {weatherIconMap[item.condition] ?? '🌡️'}
+                          </span>
+                          <span style={{ color: 'var(--text-primary)' }}>
+                            {item.condition}
+                          </span>
+                        </div>
+                      </td>
+                      <td
+                        className="px-6 py-3 font-semibold"
+                        style={{ color: 'var(--accent)' }}
+                      >
+                        {Math.round(item.temperature)}°C
+                      </td>
+                      <td
+                        className="px-6 py-3"
+                        style={{ color: 'var(--text-secondary)' }}
+                      >
+                        {item.humidity}%
+                      </td>
+                      <td
+                        className="px-6 py-3"
+                        style={{ color: 'var(--text-secondary)' }}
+                      >
+                        {item.windSpeed} m/s
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </>
       )}
