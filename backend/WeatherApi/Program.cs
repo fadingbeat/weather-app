@@ -55,6 +55,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IStatsService, StatsService>();
 
 var app = builder.Build();
 
