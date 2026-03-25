@@ -80,71 +80,73 @@ export default function HistoryPage() {
             borderColor: 'var(--border)',
           }}
         >
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                {['City', 'Condition', 'Temp', 'Searched At'].map((h) => (
-                  <th
-                    key={h}
-                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((item, i) => (
-                <tr
-                  key={item.id}
-                  style={{
-                    borderBottom:
-                      i < history.length - 1
-                        ? '1px solid var(--border)'
-                        : 'none',
-                    backgroundColor:
-                      i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
-                  }}
-                >
-                  <td
-                    className="px-6 py-3 font-medium"
-                    style={{ color: 'var(--text-primary)' }}
-                  >
-                    {item.city}
-                  </td>
-                  <td className="px-6 py-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">
-                        {weatherIconMap[item.weatherCondition] ?? '🌡️'}
-                      </span>
-                      <span style={{ color: 'var(--text-secondary)' }}>
-                        {item.weatherCondition}
-                      </span>
-                    </div>
-                  </td>
-                  <td
-                    className="px-6 py-3 font-semibold"
-                    style={{ color: 'var(--accent)' }}
-                  >
-                    {Math.round(item.temperatureC)}°C
-                  </td>
-                  <td
-                    className="px-6 py-3"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
-                    {new Date(item.searchedAt).toLocaleString('en-GB', {
-                      weekday: 'short',
-                      day: 'numeric',
-                      month: 'short',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-150">
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['City', 'Condition', 'Temp', 'Searched At'].map((h) => (
+                    <th
+                      key={h}
+                      className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      {h}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {history.map((item, i) => (
+                  <tr
+                    key={item.id}
+                    style={{
+                      borderBottom:
+                        i < history.length - 1
+                          ? '1px solid var(--border)'
+                          : 'none',
+                      backgroundColor:
+                        i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)',
+                    }}
+                  >
+                    <td
+                      className="px-6 py-3 font-medium"
+                      style={{ color: 'var(--text-primary)' }}
+                    >
+                      {item.city}
+                    </td>
+                    <td className="px-6 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-base">
+                          {weatherIconMap[item.weatherCondition] ?? '🌡️'}
+                        </span>
+                        <span style={{ color: 'var(--text-secondary)' }}>
+                          {item.weatherCondition}
+                        </span>
+                      </div>
+                    </td>
+                    <td
+                      className="px-6 py-3 font-semibold"
+                      style={{ color: 'var(--accent)' }}
+                    >
+                      {Math.round(item.temperatureC)}°C
+                    </td>
+                    <td
+                      className="px-6 py-3"
+                      style={{ color: 'var(--text-muted)' }}
+                    >
+                      {new Date(item.searchedAt).toLocaleString('en-GB', {
+                        weekday: 'short',
+                        day: 'numeric',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

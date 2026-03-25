@@ -14,12 +14,14 @@ export default function Layout({ children }) {
           borderColor: 'var(--border)',
         }}
       >
-        <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 sm:py-0 sm:h-16 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
           <WeatherWidget />
           <NavBar />
         </div>
       </header>
-      <main className="max-w-6xl mx-auto px-8 py-8">{children}</main>
+      <main className="max-w-6xl mx-auto px-4 sm:px-8 py-6 sm:py-8">
+        {children}
+      </main>
     </div>
   );
 }
