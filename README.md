@@ -17,19 +17,19 @@ A full-stack weather application built with React/Vite (frontend), .NET (backend
 
 ### Backend (`/backend` or root `.env` / `appsettings.json`)
 
-| Variable | Description |
-|---|---|
-| `ConnectionStrings__DefaultConnection` | PostgreSQL connection string |
-| `Jwt__Secret` | Secret key used to sign JWT tokens |
-| `Jwt__Issuer` | JWT issuer (e.g. `https://localhost:5000`) |
-| `Jwt__Audience` | JWT audience (e.g. `https://localhost:5173`) |
-| `OpenWeather__ApiKey` | Your OpenWeather API key |
+| Variable                               | Description                                  |
+| -------------------------------------- | -------------------------------------------- |
+| `ConnectionStrings__DefaultConnection` | PostgreSQL connection string                 |
+| `Jwt__Secret`                          | Secret key used to sign JWT tokens           |
+| `Jwt__Issuer`                          | JWT issuer (e.g. `https://localhost:5065`)   |
+| `Jwt__Audience`                        | JWT audience (e.g. `https://localhost:5173`) |
+| `OpenWeather__ApiKey`                  | Your OpenWeather API key                     |
 
 ### Frontend (`/frontend/.env`)
 
-| Variable | Description |
-|---|---|
-| `VITE_API_URL` | Base URL of the backend API (e.g. `http://localhost:5000`) |
+| Variable            | Description                                                                                  |
+| ------------------- | -------------------------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL` | Base URL of the backend API (e.g. `http://localhost:5065`) — Swagger available at `/swagger` |
 
 ---
 
@@ -78,7 +78,7 @@ createdb weatherapp
 Copy and fill in your values:
 
 - **Backend:** update `backend/appsettings.json` or set environment variables as listed above
-- **Frontend:** create `frontend/.env` and set `VITE_API_URL`
+- **Frontend:** create `frontend/.env` and set `VITE_API_BASE_URL`
 
 ### 4. Run database migrations
 
@@ -94,7 +94,7 @@ cd backend
 dotnet run
 ```
 
-The API will be available at `http://localhost:5000`.
+The API will be available at `http://localhost:5065`.
 
 ### 6. Start the frontend
 
@@ -110,7 +110,7 @@ The app will be available at `http://localhost:5173`.
 
 ## Notes
 
-- The frontend Vite dev server proxies API requests — make sure `VITE_API_URL` matches the port your backend is running on.
+- The frontend Vite dev server proxies API requests — make sure `VITE_API_BASE_URL` matches the port your backend is running on.
 - JWT tokens are required for protected routes. Register or log in through the app to obtain a token.
 - OpenWeather free tier is sufficient for development use.
 
