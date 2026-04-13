@@ -14,6 +14,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    e.stopPropagation();
     setLoading(true);
     try {
       const res = await api.post('/api/auth/login', { email, password });

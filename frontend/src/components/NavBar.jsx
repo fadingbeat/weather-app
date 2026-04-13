@@ -3,7 +3,7 @@ import { useAuth } from '../context/useAuth';
 import { useTheme } from '../context/useTheme';
 
 export default function NavBar() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
@@ -42,7 +42,12 @@ export default function NavBar() {
       >
         {theme === 'dark' ? '☀️' : '🌧️'}
       </button>
-
+      {user && (
+        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          <span style={{ color: 'var(--text-secondary)' }}>Welcome, </span>
+          {user.email}
+        </span>
+      )}
       <button
         onClick={handleLogout}
         className="ml-1 px-3 py-1.5 rounded-lg border text-sm font-medium transition-all duration-200"
